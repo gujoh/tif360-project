@@ -33,13 +33,13 @@ def get_data(transform=None, batch_size=32, shuffle=True):
 # Shows an image. 
 def show_img(img):
     plt.imshow(np.transpose(vutils.make_grid(img, normalize=True), (1, 2, 0)))
-    #plt.imshow(v_F.to_pil_image(img))
     plt.xticks([])
     plt.yticks([])
     plt.show()
 
 # Shows all the images in a batch.
 def show_batch(batch):
+    plt.figure(figsize=(10,8))
     plt.imshow(np.transpose(vutils.make_grid(batch, padding=2, normalize=True), (1, 2, 0)))
     plt.xticks([])
     plt.yticks([])
