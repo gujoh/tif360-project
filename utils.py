@@ -3,7 +3,9 @@ from PIL import Image
 from torch.utils.data import Dataset as TorchDataset
 from matplotlib import pyplot as plt
 from torchvision.transforms import functional as v_F
+import torchvision.utils as vutils
 import torch
+import numpy as np
 
 # Dataset to store the images. 
 class Dataset(TorchDataset):
@@ -30,7 +32,15 @@ def get_data(transform=None, batch_size=32, shuffle=True):
     
 # Shows an image. 
 def show_img(img):
-    plt.imshow(v_F.to_pil_image(img))
+    plt.imshow(np.transpose(vutils.make_grid(img, normalize=True), (1, 2, 0)))
+    #plt.imshow(v_F.to_pil_image(img))
+    plt.xticks([])
+    plt.yticks([])
+    plt.show()
+
+# Shows all the images in a batch.
+def show_batch(batch):
+    plt.imshow(np.transpose(vutils.make_grid(batch, padding=2, normalize=True), (1, 2, 0)))
     plt.xticks([])
     plt.yticks([])
     plt.show()
