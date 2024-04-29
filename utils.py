@@ -6,6 +6,7 @@ from torchvision.transforms import functional as v_F
 import torchvision.utils as vutils
 import torch
 import numpy as np
+import glob
 
 # Dataset to store the images. 
 class Dataset(TorchDataset):
@@ -22,6 +23,41 @@ class Dataset(TorchDataset):
         image = Image.open(img_loc).convert("RGB")
         tensor_image = self.transform(image)
         return tensor_image
+
+class CycleDataset(TorchDataset):
+    def __init__(self, root, transform=None, unaligned=False, mode='train'):
+        self.transform = transform 
+        self.unaligned = unaligned
+        self.mode = mode 
+        if self.mode == 'train':
+            self.files_A = sorted(glob.glob(os.path.join(root + '/monet_jpg') + '/*.*')[:250])
+            self.files_B = sorted(glob.glob(os.path.join(root + '/photo_jpg') + '/*.*')[:250])
+        elif self.mode == 'test':
+            self.files_A = sorted(glob.glob(os.path.join(root + '/monet_jpg') + '/*.*')[250:])
+            self.files_B = sorted(glob.glob(os.path.join(root + '/photo_jpg') + '/*.*')[250:301])
+    
+    def __len__(self):
+        return max(len(self.files_A), len(self.files_B))
+        
+    def __getitem__(self, idx):
+        image_A = Image.open(self.files_A[idx % len(self.files_A)])
+        if self.unaligned: 
+            image_B = Image.open(self.files_B[np.random.randint(0, len(self.files_B) - 1)])
+        else:
+            image_B = Image.open(self.files_B[idx % len(self.files_B)])
+        if image_A.mode != 'RGB':
+            image_A = to_rgb(image_A)
+        if image_B.mode != 'RGB':
+            image_B = to_rgb(image_B)
+            
+        item_A = self.transform(image_A)
+        item_B = self.transform(image_B)
+        return {'A':item_A, 'B':item_B}
+
+def to_rgb(image):
+    rgb_image = Image.new("RGB", image.size)
+    rgb_image.paste(image)
+    return rgb_image
 
 def get_data(transform=None, batch_size=32, shuffle=True):
     paintings = Dataset("./data/monet_jpg", transform)

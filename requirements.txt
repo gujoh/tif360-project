@@ -6,3 +6,4 @@ ipykernel
 matplotlib
 natsort
 pillow
+tqdm
