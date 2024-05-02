@@ -74,9 +74,10 @@ def show_img(img):
     plt.show()
 
 # Shows all the images in a batch.
-def show_batch(batch):
+def show_batch(batch, title=""):
     plt.figure(figsize=(10,8))
     plt.imshow(np.transpose(vutils.make_grid(batch, padding=2, normalize=True), (1, 2, 0)))
+    plt.title(title)
     plt.xticks([])
     plt.yticks([])
     plt.show()
