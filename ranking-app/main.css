@@ -1,0 +1,41 @@
+.main {
+    background-color: lightblue;
+    font-family: monospace;
+}
+
+.outer {
+    display: table;
+    margin-right: auto;
+    margin-left: auto;
+    width: 800px;
+    height: 600px;
+}
+
+.left {
+    float: left;
+    margin: 20px;
+    display: grid;
+}
+
+.right {
+    float: right;
+    margin: 20px;
+}
+
+.inner {
+    display: grid;
+    margin-top: 50px;
+}
+
+.button {
+    margin: 5px;
+}
+
+.score {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+

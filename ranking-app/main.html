@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="main.css">
+  <title>Hej</title>
+</head>
+
+<body class="main">
+    <div class="outer">
+        <div class="left">
+            <div class="inner">
+                <img id="left_img" src="./images/dcgan/dc0.jpg">
+                <button class="button" type="button" onclick="voteLeft()">Left</button>
+            </div>
+        </div>
+        <div class="right">
+            <div class="inner">
+                <img id="right_img" src="./images/cyclegan/cycle1.jpg">
+                <button class="button" type="button" onclick="voteRight()">Right</button>
+            </div>
+        </div>
+    </div>
+    <div class="score">
+        <header>Score:</header>
+        <header id="cycle_txt">Cycle: 0</header>
+        <header id="dc_txt">DC: 0</header>
+        <header id="total_txt">Total: 0</header>
+    </div>
+    <script src="./index.js"></script>
+</body>
+</html>
