@@ -25,16 +25,11 @@ class Dataset(TorchDataset):
         return tensor_image
 
 class CycleDataset(TorchDataset):
-    def __init__(self, root, transform=None, unaligned=False, mode='train'):
+    def __init__(self, root, transform=None, unaligned=False):
         self.transform = transform 
         self.unaligned = unaligned
-        self.mode = mode 
-        if self.mode == 'train':
-            self.files_A = sorted(glob.glob(os.path.join(root + '/monet_jpg') + '/*.*')[:250])
-            self.files_B = sorted(glob.glob(os.path.join(root + '/photo_jpg') + '/*.*')[:250])
-        elif self.mode == 'test':
-            self.files_A = sorted(glob.glob(os.path.join(root + '/monet_jpg') + '/*.*')[250:])
-            self.files_B = sorted(glob.glob(os.path.join(root + '/photo_jpg') + '/*.*')[250:301])
+        self.files_A = sorted(glob.glob(os.path.join(root + '/monet_jpg') + '/*.*')[:301])
+        self.files_B = sorted(glob.glob(os.path.join(root + '/photo_jpg') + '/*.*')[:301])
     
     def __len__(self):
         return max(len(self.files_A), len(self.files_B))
@@ -81,3 +76,7 @@ def show_batch(batch, title=""):
     plt.xticks([])
     plt.yticks([])
     plt.show()
+
+# Measures the accuracy. 
+def accuracy(target, pred):
+  return torch.sum((torch.round(target) == torch.round(pred))) / target.shape[0]
