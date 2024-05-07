@@ -7,6 +7,7 @@ import torchvision.utils as vutils
 import torch
 import numpy as np
 import glob
+import torch.nn as nn
 
 # Dataset to store the images. 
 class Dataset(TorchDataset):
@@ -77,6 +78,27 @@ def show_batch(batch, title=""):
     plt.yticks([])
     plt.show()
 
+# Saves an image to disk. 
+def save_img(batch, path):
+    plt.imshow(np.transpose(vutils.make_grid(batch, padding=0, normalize=True), (1, 2, 0)))
+    plt.xticks([])
+    plt.yticks([])
+    plt.tight_layout()
+    plt.savefig(path)
+
+# Generates and saves fake images to disk. 
+# x is the input to the model, i.e. a noise vector for 
+# DCGAN, and an image for CycleGAN. 
+# For DCGAN, the noise vector can look as follows: 
+# noise_vector = torch.randn(1, args.latent_dim, 1, 1).to(device)
+def gen_images(model, num_images, x, path):
+    model.eval()
+    for i in range(num_images):
+        upsample = nn.Upsample(scale_factor=2, mode='bilinear')
+        with torch.no_grad():
+            out = upsample(model(x).detach().cpu())
+            save_img(out, path + f"dc{i}")
+
 # Measures the accuracy. 
 def accuracy(target, pred):
-  return torch.sum((torch.round(target) == torch.round(pred))) / target.shape[0]
+    return torch.sum((torch.round(target) == torch.round(pred))) / target.shape[0]
