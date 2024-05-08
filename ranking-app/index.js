@@ -17,12 +17,12 @@ class Image {
         if (this.type == Type.CYCLE) {
             this.type = Type.DC ;
             var idx = getRandomInt(len);
-            img = dcPath + idx + ".jpg"
+            img = dcPath + idx + ".png"
         }
         else if (this.type == Type.DC) {
             this.type = Type.CYCLE;
             var idx = getRandomInt(len);
-            img = cyclePath + idx + ".jpg"
+            img = cyclePath + idx + ".png"
         }
         else {
             throw new Error("this.type has an illegal value: " + this.type);

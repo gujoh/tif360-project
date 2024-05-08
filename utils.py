@@ -96,8 +96,8 @@ def gen_images(model, num_images, x, path):
     for i in range(num_images):
         upsample = nn.Upsample(scale_factor=2, mode='bilinear')
         with torch.no_grad():
-            out = upsample(model(x).detach().cpu())
-            save_img(out, path + f"dc{i}")
+            out = upsample(model(x[i, :]).detach().cpu())
+            save_img(out, path + f"{i}")
 
 # Measures the accuracy. 
 def accuracy(target, pred):
