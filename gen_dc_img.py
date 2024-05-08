@@ -55,7 +55,8 @@ class Generator(nn.Module):
         x = self.conv5(x)
         return F.tanh(x)
 
-n_images =  100
+n_images =  200
 dc = torch.load("models/dc_015threshold_1000epochs_label_smoothing", map_location="cpu")
-noise_vector = torch.randn(n_images, 1, 100, 1, 1)
-gen_images(dc, n_images, noise_vector, "ranking-app/images/dcgan/dc")
+dc.eval()
+noise_vector = torch.randn(n_images, 100, 1, 1)
+gen_images(dc, noise_vector, "ranking-app/images/dcgan/dc")

@@ -91,13 +91,15 @@ def save_img(batch, path):
 # DCGAN, and an image for CycleGAN. 
 # For DCGAN, the noise vector can look as follows: 
 # noise_vector = torch.randn(1, args.latent_dim, 1, 1).to(device)
-def gen_images(model, num_images, x, path):
+def gen_images(model, x, path):
     model.eval()
-    for i in range(num_images):
-        upsample = nn.Upsample(scale_factor=2, mode='bilinear')
-        with torch.no_grad():
-            out = upsample(model(x[i, :]).detach().cpu())
-            save_img(out, path + f"{i}")
+    upsample = nn.Upsample(scale_factor=2, mode='bilinear')
+    with torch.no_grad():
+        out = model(x).detach().cpu()
+        upsampled = upsample(out)
+        for i, img in enumerate(upsampled):
+            save_img(img, path + f"{i}")
+
 
 # Measures the accuracy. 
 def accuracy(target, pred):
