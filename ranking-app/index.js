@@ -50,7 +50,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-len = 2;
+len = 100;
 cycleCount = 0;
 dcCount = 0;
 let cycleElement = document.getElementById("cycle_txt")
