@@ -3,7 +3,7 @@
 ##############################################
 import torch 
 import torch.nn as nn 
-from utils import gen_images, CycleDataset
+from utils import gen_images, CycleDataset, save_img
 import torch.nn.functional as F 
 from torchvision import transforms
 from PIL import Image
@@ -115,23 +115,25 @@ class Generator(nn.Module):
 # Loading the images.
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 transform = transforms.Compose([
-    transforms.Resize(int(args.img_size*1.12), Image.BICUBIC),
-    transforms.RandomCrop((args.img_size, args.img_size)),
-    transforms.RandomHorizontalFlip(),
+    transforms.Resize((args.img_size, args.img_size), Image.BICUBIC),
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
 
-n_images =  200
+n_images =  20
 loader = torch.utils.data.DataLoader(
     CycleDataset("data/", transform=transform, unaligned=True),
     batch_size=n_images,
     shuffle=True
 )
 
-cycle = torch.load("models/cycle_ba_200epochs", map_location="cpu")
-cycle.eval()
+cycle_ba = torch.load("models/cycle_ba_200epochs", map_location="cpu")
+cycle_ab = torch.load("models/cycle_ab_200epochs", map_location="cpu")
+cycle_ba.eval()
+cycle_ab.eval()
 x = next(iter(loader))['B']
-out = cycle(x).detach().cpu()
-gen_images(cycle, x, "ranking-app/images/cyclegan/cycle")
-
+out = cycle_ba(x).detach().cpu()
+gen_images(cycle_ba, x, "example_images/fake_monet/fake_monet")
+gen_images(cycle_ab, out, "example_images/fake_photos/fake_photo" )
+for i, img in enumerate(x):
+    save_img(img, "example_images/photos/real_photo" + f"{i}")

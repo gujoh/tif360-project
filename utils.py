@@ -100,7 +100,6 @@ def gen_images(model, x, path):
         for i, img in enumerate(upsampled):
             save_img(img, path + f"{i}")
 
-
 # Measures the accuracy. 
 def accuracy(target, pred):
     return torch.sum((torch.round(target) == torch.round(pred))) / target.shape[0]
